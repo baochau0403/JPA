@@ -8,10 +8,8 @@
 		<label for="fname">Category name:</label><br> <input type="text"
 			id="categoryname" name="categoryname"><br> <label
 			for="lname">Link images:</label><br> <input type="text"
-			id="images" name="images"><br> <label for="lname">Upload
-			images:</label><br> <input type="file" id="images1" name="images1"><br>
-
-
+			id="images1" name="images1"><br> <label for="lname">Upload
+			images:</label><br> <input type="file" id="images" name="images"><br>
 
 
 

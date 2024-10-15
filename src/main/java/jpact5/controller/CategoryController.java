@@ -1,9 +1,9 @@
 package jpact5.controller;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
-
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -18,11 +18,9 @@ import jpact5.service.impl.CategoryServiceImpl;
 
 import static jpact5.util.Constant.*;
 
-
-@MultipartConfig(fileSizeThreshold = 1024 * 1024,
-maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = { "/admin/categories", "/admin/category/add", "/admin/category/insert",
-		"/admin/category/edit", "/admin/category/update", "/admin/category/delete", "/admin/category/search"})
+		"/admin/category/edit", "/admin/category/update", "/admin/category/delete", "/admin/category/search" })
 public class CategoryController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -66,10 +64,12 @@ public class CategoryController extends HttpServlet {
 		if (url.contains("insert")) {
 			Category category = new Category();
 			String categoryname = req.getParameter("categoryname");
+			String images = req.getParameter("images1");
 			String status = req.getParameter("status");
 			int statuss = Integer.parseInt(status);
 			category.setStatus(statuss);
 			category.setCategoryname(categoryname);
+			category.setImages(images);
 			String fname = "";
 			String uploadPath = UPLOAD_DIRECTORY;
 			File uploadDir = new File(uploadPath);
@@ -77,7 +77,7 @@ public class CategoryController extends HttpServlet {
 				uploadDir.mkdir();
 			}
 			try {
-				Part part = req.getPart("image");
+				Part part = req.getPart("images");
 				if (part.getSize() > 0) {
 					String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
 					// Doi ten file
@@ -89,32 +89,35 @@ public class CategoryController extends HttpServlet {
 
 					// Ghi ten file vao data
 					category.setImages(fname);
-				} else {
-					category.setImages("avata.png");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 
 			}
 
-			cateService.insert(null);
+			cateService.insert(category);
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
 		} else if (url.contains("update")) {
 
 			int categoryid = Integer.parseInt(req.getParameter("categoryid"));
 			String categoryname = req.getParameter("categoryname");
 			String status = req.getParameter("status");
+			String images = req.getParameter("images");
 			int statuss = Integer.parseInt(status);
-		
+
 			Category category = new Category();
 			category.setCategoryid(categoryid);
 			category.setCategoryname(categoryname);
-			category.setStatus(statuss);
-			//Lưu hình cũ
 			Category cateold = cateService.findById(categoryid);
 			String fileold = cateold.getImages();
-			
-			//Xử lý images
+			category.setImages(fileold);
+			if (images != null || images.strip().length() != 0)
+
+				category.setImages(images);
+			category.setStatus(statuss);
+			// Lưu hình cũ
+
+			// Xử lý images
 			String fname = "";
 			String uploadPath = UPLOAD_DIRECTORY;
 			File uploadDir = new File(uploadPath);
@@ -122,7 +125,7 @@ public class CategoryController extends HttpServlet {
 				uploadDir.mkdir();
 			}
 			try {
-				Part part = req.getPart("image");
+				Part part = req.getPart("images");
 				if (part.getSize() > 0) {
 					String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
 					// Doi ten file
@@ -135,17 +138,14 @@ public class CategoryController extends HttpServlet {
 					// Ghi ten file vao data
 					category.setImages(fname);
 				} else {
-					category.setImages(fileold);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 
-			
-
-			cateService.update(category);
-			resp.sendRedirect(req.getContextPath() + "/admin/categories");
+				cateService.update(category);
+				resp.sendRedirect(req.getContextPath() + "/admin/categories");
 			}
 		}
 	}
-	}	
-
+}
