@@ -1,7 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<form action="${pageContext.request.contextPath }/admin/category/search"
+	method="get" enctype="multipart/form-data">
+	<input type="input" id="search" name="search" value="0">
+	 <input type="submit" value="Search">
+	<br>	
+</form>
 <a href ="${pageContext.request.contextPath }/admin/category/add">Add Category</a>
+
 <table border="1" width="100">
 	<tr>
 		<th>STT</th>

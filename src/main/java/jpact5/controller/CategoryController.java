@@ -53,6 +53,20 @@ public class CategoryController extends HttpServlet {
 			}
 			resp.sendRedirect(req.getContextPath() + "/admin/categories");
 		}
+		else if (url.contains("search"))
+		{
+			String search = req.getParameter("search");
+			if (search !=null || search.strip().length()!=0)
+			{
+				List<Category> list = cateService.findByCategoryname(search);
+				req.setAttribute("listcate", list);
+				req.getRequestDispatcher("/admin/category-list.jsp").forward(req, resp);
+				return;
+			}
+			List<Category> list = cateService.findAll();
+			req.setAttribute("listcate", list);
+			req.getRequestDispatcher("/admin/category-list.jsp").forward(req, resp);
+		}
 	}
 
 	@Override
