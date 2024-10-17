@@ -49,12 +49,12 @@ public class VideoDaoImpl implements IVideoDao{
 	}
 
 	@Override
-	public void delete(int cateid) throws Exception {
+	public void delete(int videoid) throws Exception {
 		EntityManager enma = JPAConfig.getEntityManager();
 		EntityTransaction trans = enma.getTransaction();
 		try {
 			trans.begin();
-			Video video = enma.find(Video.class, cateid);
+			Video video = enma.find(Video.class,videoid);
 			if (video !=null) {
 				enma.remove(video);
 			}
@@ -73,9 +73,9 @@ public class VideoDaoImpl implements IVideoDao{
 	}
 
 	@Override
-	public Video findById(int cateid) {
+	public Video findById(int videoid) {
 		EntityManager enma = JPAConfig.getEntityManager();
-		Video video = enma.find(Video.class, cateid);
+		Video video = enma.find(Video.class, videoid);
 		return video;
 	}
 
@@ -86,14 +86,6 @@ public class VideoDaoImpl implements IVideoDao{
 		return query.getResultList();	
 	}
 
-	@Override
-	public List<Video> findByCategoryname(String catename) {
-		EntityManager enma = JPAConfig.getEntityManager();
-		String jpql = "SELECT Video v WHERE v.catename like :catename";
-		TypedQuery<Video> query= enma.createQuery(jpql, Video.class);
-		
-		return query.getResultList();
-	}
 
 	@Override
 	public List<Video> findAll(int page, int pagesize) {
@@ -110,6 +102,15 @@ public class VideoDaoImpl implements IVideoDao{
 		String jpql = "SELECT count(c) FROM Video v";
 		Query query = enma.createNativeQuery(jpql);
 		return ((Long)query.getSingleResult()).intValue();
+	}
+
+	@Override
+	public List<Video> findByVideoname(String videoname) {
+		EntityManager enma = JPAConfig.getEntityManager();
+		String jpql = "SELECT v FROM Video v WHERE v.videoname like :videoname";
+		TypedQuery<Video> query= enma.createQuery(jpql, Video.class);
+		query.setParameter("videoname", "%" + videoname + "%");
+		return query.getResultList();
 	}
 
 }

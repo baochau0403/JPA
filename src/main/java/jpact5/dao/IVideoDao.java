@@ -9,10 +9,10 @@ public interface IVideoDao {
 
 	void insert (Video video);
 	void update (Video video);
-	void delete (int cateid) throws Exception;
-	Video findById (int cateid);
+	void delete (int videoid) throws Exception;
+	Video findById (int videoid);
 	List<Video> findAll();
-	List<Video> findByCategoryname (String catename);
+	List<Video> findByVideoname (String videoame);
 	List<Video> findAll(int page, int pagesize);
 	int count();
 }
